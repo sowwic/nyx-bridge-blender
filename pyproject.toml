@@ -35,6 +35,12 @@ dev = [
     "ruff",
     "debugpy",
 ]
+# Installed for Blender's Python by blender_test.sh
+blender-pytest = [
+    "pytest",
+    "pytest-cov",
+    "pytest-mock",
+]
 
 [tool.uv.sources]
 nyx-bridge = { git = "https://github.com/sowwic/nyx-bridge", rev = "c392ced57ba8fd09fa8ce8241a0360261e05d3cf" }

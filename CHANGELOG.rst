@@ -3,4 +3,4 @@ nyx-bridge-blender
 
 v1.0.0
 ------
-* <Change description goes here>.
+* Add ``BlenderClient``, ``nyx_bridge_blender.start``/``stop`` and the Blender extension with its connect operators, sidebar panel and preferences.

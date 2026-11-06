@@ -1,0 +1,18 @@
+schema_version = "1.0.0"
+
+id = "nyx_bridge_blender"
+version = "1.0.0"
+name = "Nyx Bridge"
+tagline = "Connect Blender to Nyx"
+maintainer = "Dima Shevchenko <47799401+sowwic@users.noreply.github.com>"
+type = "add-on"
+website = "https://github.com/sowwic/nyx-bridge-blender"
+tags = ["Pipeline", "Development"]
+
+blender_version_min = "4.2.0"
+license = ["SPDX:MIT"]
+
+# The wheels are added by `scripts/build_extension.py`.
+
+[permissions]
+network = "Connect to Nyx on this computer"

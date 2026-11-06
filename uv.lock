@@ -697,6 +697,11 @@ dependencies = [
 ]
 
 [package.dev-dependencies]
+blender-pytest = [
+    { name = "pytest" },
+    { name = "pytest-cov" },
+    { name = "pytest-mock" },
+]
 dev = [
     { name = "debugpy" },
     { name = "mkdocs" },
@@ -714,6 +719,11 @@ dev = [
 requires-dist = [{ name = "nyx-bridge", git = "https://github.com/sowwic/nyx-bridge?rev=c392ced57ba8fd09fa8ce8241a0360261e05d3cf" }]
 
 [package.metadata.requires-dev]
+blender-pytest = [
+    { name = "pytest" },
+    { name = "pytest-cov" },
+    { name = "pytest-mock" },
+]
 dev = [
     { name = "debugpy" },
     { name = "mkdocs" },
