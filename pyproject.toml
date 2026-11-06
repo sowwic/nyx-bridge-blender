@@ -1,0 +1,69 @@
+[project]
+name = "nyx-bridge-blender"
+version = "1.0.0"
+description = "Description"
+authors = [
+    {name = "Dima Shevchenko",email = "47799401+sowwic@users.noreply.github.com"}
+]
+license = {text = "MIT"}
+readme = "README.md"
+requires-python = ">=3.11"
+packages = [
+    {include = "nyx_bridge_blender", from="src"},
+]
+dependencies = [
+  "nyx-bridge"
+]
+
+[build-system]
+requires = ["uv_build>=0.10.6"]
+build-backend = "uv_build"
+
+[tool.uv.build-backend]
+module-name = "nyx_bridge_blender"
+
+[dependency-groups]
+dev = [
+    "pytest",
+    "pytest-cov",
+    "pytest-mock",
+    "mkdocs",
+    "mkdocs-material",
+    "mkdocstrings[python]",
+    "mkdocs-autorefs",
+    "mkdocs-autoapi",
+    "ruff",
+    "debugpy",
+]
+
+[tool.uv.sources]
+nyx-bridge = { git = "https://github.com/sowwic/nyx-bridge", rev = "c392ced57ba8fd09fa8ce8241a0360261e05d3cf" }
+
+[tool.ruff]
+src = ["src"]
+exclude = ["**/resources_rc.py"]
+
+show-fixes = true
+line-length = 89
+lint.select = [
+    "E",
+    "F",
+    "UP",
+]
+lint.ignore = [
+    "D100",
+    "D104",
+    "D103",
+]
+
+[tool.pytest.ini_options]
+addopts = "--cov=nyx_bridge_blender --cov-report=term-missing"
+log_cli = true
+log_cli_level = "ERROR"
+
+[tool.ty.rules]
+unresolved-attribute="ignore"
+invalid-argument-type="ignore"
+invalid-assignment="ignore"
+invalid-return-type="ignore"
+invalid-method-override="ignore"

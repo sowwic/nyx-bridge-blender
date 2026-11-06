@@ -1,0 +1,15 @@
+name: Tests
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+  push:
+    branches: [main, develop]
+  workflow_dispatch:
+
+jobs:
+  unit-tests:
+    uses: sowwic/gh-workflows/.github/workflows/python-tests.yml@v1
+    with:
+      python-versions: '["3.11"]'
+      macos-python-versions: '["3.11"]'
