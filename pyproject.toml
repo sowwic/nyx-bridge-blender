@@ -35,11 +35,11 @@ dev = [
     "ruff",
     "debugpy",
 ]
-# Installed for Blender's Python by blender_test.sh
-blender-pytest = [
-    "pytest",
-    "pytest-cov",
-    "pytest-mock",
+# Blender as a Python module, to run the tests without a Blender installation
+# (`make pytest`). Each bpy release needs exactly one Python version, 3.13 for
+# 5.1 and 5.2, and has no wheel for Intel Macs or Linux on ARM.
+bpy = [
+    "bpy==5.2.3; python_full_version >= '3.13' and python_full_version < '3.14' and ((sys_platform == 'darwin' and platform_machine == 'arm64') or (sys_platform == 'linux' and platform_machine == 'x86_64') or sys_platform == 'win32')",
 ]
 
 [tool.uv.sources]

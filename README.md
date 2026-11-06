@@ -61,8 +61,13 @@ make check         # lint + tests
 make help          # list all targets
 ```
 
-The tests run inside Blender (`./blender_test.sh`, used by `make pytest`), with
-`BLENDER` set as described above. `make validate` checks the extension manifest.
+The tests run with the [`bpy`](https://pypi.org/project/bpy/) package, Blender as a
+Python module, so no Blender install is needed (a 250 MB download the first time).
+`bpy` 5.2 needs Python 3.13, see `.python-version`. `make pytest` runs them, and CI does
+the same.
+
+A plain `pytest` without `bpy` skips everything that needs Blender. `make validate` checks the
+extension manifest.
 
 ## Releasing
 

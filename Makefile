@@ -12,7 +12,8 @@ DEVELOP_BRANCH ?= develop
 GH_WORKFLOWS_REF ?= v1
 EXTENSION_ID = nyx_bridge_blender
 EXTENSION_USER_REPO = user_default
-# Same lookup as blender_test.sh: explicit file, project .env, then the user config
+# File with BLENDER, the Blender executable the extension targets use: an explicit
+# file, the project .env, then the user config
 ENV_FILE ?= $(or $(BLENDER_CI_ENV_FILE),$(wildcard .env),$(HOME)/.config/blender-ci.env)
 
 # Colors
@@ -67,16 +68,16 @@ format: ## Run the Ruff formatter on source and test files
 	@uv run ruff format src tests
 
 .PHONY: pytest
-pytest: ## Run the tests inside Blender (BLENDER from the env file)
-	$(call banner, Running pytest in Blender...)
-	@./blender_test.sh
+pytest: ## Run the tests with the bpy package (Blender as a Python module)
+	$(call banner, Running pytest...)
+	@uv run --group bpy pytest tests
 
 .PHONY: pytest-pdb
 pytest-pdb: ## Run pytest with pdb on failure
 	$(call banner, Cleaning pytest output dir...)
 	@rm -rf $(TEST_OUTPUT_DIR)
 	$(call banner, Running pytest with pdb...)
-	@./blender_test.sh --pdb --log-cli-level=DEBUG
+	@uv run --group bpy pytest -vvv --pdb --log-cli-level=DEBUG tests
 
 .PHONY: mkdocs
 mkdocs: ## Run MkDocs development server
