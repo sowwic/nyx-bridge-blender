@@ -7,6 +7,7 @@ outside of Blender.
 from __future__ import annotations
 
 import logging
+import os
 import queue
 import threading
 import typing
@@ -199,6 +200,9 @@ class BlenderClient(NyxClient):
         LOGGER.info("Disconnected from Nyx")
 
 
+CLIENT_NAME_VARIABLE = "NYX_BRIDGE_CLIENT_NAME"
+"""Environment variable naming the client, set by the Launch Process node of Nyx."""
+
 _client: BlenderClient | None = None
 _thread: threading.Thread | None = None
 
@@ -257,3 +261,37 @@ def stop() -> None:
         client.stop()
     if thread is not None and thread is not threading.current_thread():
         thread.join(timeout=5)
+
+
+def serve_background(
+    name: str | None = None,
+    address: str | tuple[str, int] | None = None,
+    token: str | None = None,
+    connect_timeout: float | None = None,
+) -> None:
+    """Serve Nyx from the main thread of a Blender running with `--background`.
+
+    There is no event loop to hand work to, so the requests run right on the calling
+    thread. Returns when Nyx asks the client to shut down or the connection ends, it
+    does not reconnect, and Blender then exits as its script is done. Start it from a
+    Launch Process node of Nyx with a command like
+
+        blender --background --python-expr "import nyx_bridge_blender;
+        nyx_bridge_blender.serve_background()"
+
+    The extension has to be installed and enabled for the package to be importable.
+
+    Args:
+        name (str | None): name Nyx shows for this Blender, `NYX_BRIDGE_CLIENT_NAME` if
+            omitted, then derived from the process id.
+        address (str | tuple[str, int] | None): `host:port` of Nyx, see `start`.
+        token (str | None): token of the Nyx server.
+        connect_timeout (float | None): seconds to keep trying to reach Nyx, forever if
+            omitted.
+    """
+    BlenderClient(
+        name=name or os.environ.get(CLIENT_NAME_VARIABLE) or None,
+        address=address,
+        token=token,
+        reconnect=False,
+    ).serve_forever(connect_timeout)

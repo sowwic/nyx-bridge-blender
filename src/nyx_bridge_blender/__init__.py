@@ -4,6 +4,7 @@ from nyx_bridge_blender.client import (
     get_client,
     is_connected,
     is_running,
+    serve_background,
     start,
     stop,
 )
@@ -16,6 +17,7 @@ __all__ = [
     "get_client",
     "is_connected",
     "is_running",
+    "serve_background",
     "start",
     "stop",
 ]

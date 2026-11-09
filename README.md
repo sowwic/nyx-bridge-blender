@@ -53,6 +53,30 @@ nyx_bridge_blender.stop()
 In `blender --background` there is no event loop to hand work to, so serve from the
 main thread instead: `nyx_bridge_blender.BlenderClient().serve_forever()`.
 
+## Starting Blender from a stage
+
+A stage can start a headless Blender itself, wait for it to connect and then run its Remote Actions in it, with a
+**Launch Process** node (Nyx) around a **Remote Client**:
+
+```
+Launch Process  ->  Remote Client  ->  Remote Action ...
+```
+
+Settings of the Launch Process node:
+
+| Input | Value |
+| --- | --- |
+| `command` | `"$BLENDER" --background --python-exit-code 1 --python-expr "import nyx_bridge_blender; nyx_bridge_blender.serve_background()"` |
+| `env` | `{"BLENDER": "/path/to/Blender.app/Contents/MacOS/Blender"}` |
+| `timeout` | seconds to wait for Blender to boot (default 60) |
+
+Nyx gives the process the address and token of its bridge server and the name it is to connect as
+(`NYX_BRIDGE_ADDRESS`, `NYX_BRIDGE_TOKEN`, `NYX_BRIDGE_CLIENT_NAME`), `serve_background` uses them. The Remote
+Client inside the node uses that Blender and no other. When the nodes inside are done, Nyx asks Blender to shut down
+and stops the process if it does not. The extension has to be installed (`make install`): Blender loads it from the
+user preferences, so do not start with `--factory-startup`. A small launcher script holding the command makes the
+node's `command` just its path. The Nyx window waits while Blender boots.
+
 ## Development
 
 ```sh

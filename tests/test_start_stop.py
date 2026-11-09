@@ -47,3 +47,51 @@ def test_start_waits_for_nyx_to_appear():
     finally:
         nyx_bridge_blender.stop()
     assert client is not None
+
+
+def test_serve_background_takes_its_name_from_the_environment_and_ends_on_shutdown(
+    server, monkeypatch
+):
+    import threading
+
+    monkeypatch.setenv(
+        nyx_bridge_blender.client.CLIENT_NAME_VARIABLE, "from-environment"
+    )
+    outcome = {}
+
+    def drive():
+        try:
+            session = server.wait_for_client(name="from-environment", timeout=15)
+            outcome["kind"] = session.kind
+            outcome["version"] = session.execute(
+                "bpy.app.version_string", mode="eval", timeout=15
+            ).value
+            session.request_shutdown()
+        except Exception as err:  # raised on the main thread below
+            outcome["error"] = err
+
+    driver = threading.Thread(target=drive)
+    driver.start()
+    nyx_bridge_blender.serve_background(
+        address=(server.host, server.port), token=server.token, connect_timeout=15
+    )
+    driver.join(timeout=15)
+
+    assert "error" not in outcome, outcome.get("error")
+    assert outcome["kind"] == "blender"
+    assert outcome["version"]
+    assert wait_until(lambda: not server.clients)
+
+
+def test_serve_background_does_not_reconnect_when_nyx_goes_away(server):
+    import threading
+
+    def drop():
+        server.wait_for_client(kind="blender", timeout=15).close()
+
+    dropper = threading.Thread(target=drop)
+    dropper.start()
+    nyx_bridge_blender.serve_background(
+        name="dropped", address=(server.host, server.port), token=server.token
+    )
+    dropper.join(timeout=15)
