@@ -43,7 +43,7 @@ bpy = [
 ]
 
 [tool.uv.sources]
-nyx-bridge = { git = "https://github.com/sowwic/nyx-bridge", rev = "c392ced57ba8fd09fa8ce8241a0360261e05d3cf" }
+nyx-bridge = { git = "https://github.com/sowwic/nyx-bridge", tag = "v1.0.0" }
 
 [tool.ruff]
 src = ["src"]

@@ -806,8 +806,8 @@ wheels = [
 
 [[package]]
 name = "nyx-bridge"
-version = "0.0.1"
-source = { git = "https://github.com/sowwic/nyx-bridge?rev=c392ced57ba8fd09fa8ce8241a0360261e05d3cf#c392ced57ba8fd09fa8ce8241a0360261e05d3cf" }
+version = "1.0.0"
+source = { git = "https://github.com/sowwic/nyx-bridge?tag=v1.0.0#d0e05a1b4af2c4bbbb113925f39edf78f1ec421d" }
 
 [[package]]
 name = "nyx-bridge-blender"
@@ -835,7 +835,7 @@ dev = [
 ]
 
 [package.metadata]
-requires-dist = [{ name = "nyx-bridge", git = "https://github.com/sowwic/nyx-bridge?rev=c392ced57ba8fd09fa8ce8241a0360261e05d3cf" }]
+requires-dist = [{ name = "nyx-bridge", git = "https://github.com/sowwic/nyx-bridge?tag=v1.0.0" }]
 
 [package.metadata.requires-dev]
 bpy = [{ name = "bpy", marker = "(python_full_version == '3.13.*' and platform_machine == 'arm64' and sys_platform == 'darwin') or (python_full_version == '3.13.*' and platform_machine == 'x86_64' and sys_platform == 'linux') or (python_full_version == '3.13.*' and sys_platform == 'win32')", specifier = "==5.2.3" }]
