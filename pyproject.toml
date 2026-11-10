@@ -35,9 +35,15 @@ dev = [
     "ruff",
     "debugpy",
 ]
+# Blender as a Python module, to run the tests without a Blender installation
+# (`make pytest`). Each bpy release needs exactly one Python version, 3.13 for
+# 5.1 and 5.2, and has no wheel for Intel Macs or Linux on ARM.
+bpy = [
+    "bpy==5.2.3; python_full_version >= '3.13' and python_full_version < '3.14' and ((sys_platform == 'darwin' and platform_machine == 'arm64') or (sys_platform == 'linux' and platform_machine == 'x86_64') or sys_platform == 'win32')",
+]
 
 [tool.uv.sources]
-nyx-bridge = { git = "https://github.com/sowwic/nyx-bridge", rev = "c392ced57ba8fd09fa8ce8241a0360261e05d3cf" }
+nyx-bridge = { git = "https://github.com/sowwic/nyx-bridge", tag = "v1.0.0" }
 
 [tool.ruff]
 src = ["src"]
