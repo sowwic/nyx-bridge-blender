@@ -4,6 +4,10 @@ site_author: Dima Shevchenko
 theme:
   name: material
 
+markdown_extensions:
+  - admonition
+  - pymdownx.superfences
+
 plugins:
   - search
   - mkdocs-autoapi:
@@ -32,5 +36,14 @@ plugins:
   - autorefs
 
 nav:
-  - User Guide: user/index.md
-  - Developer Guide: dev/index.md
+  - Home: index.md
+  - User Guide:
+      - user/index.md
+      - Installation: user/installation.md
+      - Connecting Blender to Nyx: user/connecting.md
+      - Starting Blender from a stage: user/background.md
+  - Developer Guide:
+      - dev/index.md
+      - Architecture: dev/architecture.md
+      - Testing: dev/testing.md
+      - Releasing: dev/releasing.md
