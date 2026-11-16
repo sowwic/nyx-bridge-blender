@@ -3,17 +3,13 @@ name = "nyx-bridge-blender"
 version = "1.0.0"
 description = "Description"
 authors = [
-    {name = "Dima Shevchenko",email = "47799401+sowwic@users.noreply.github.com"}
+  { name = "Dima Shevchenko", email = "47799401+sowwic@users.noreply.github.com" },
 ]
-license = {text = "MIT"}
+license = { text = "MIT" }
 readme = "README.md"
 requires-python = ">=3.11"
-packages = [
-    {include = "nyx_bridge_blender", from="src"},
-]
-dependencies = [
-  "nyx-bridge"
-]
+packages = [{ include = "nyx_bridge_blender", from = "src" }]
+dependencies = ["sowwic-nyx-bridge>=1.0.0"]
 
 [build-system]
 requires = ["uv_build>=0.10.6"]
@@ -24,26 +20,23 @@ module-name = "nyx_bridge_blender"
 
 [dependency-groups]
 dev = [
-    "pytest",
-    "pytest-cov",
-    "pytest-mock",
-    "mkdocs",
-    "mkdocs-material",
-    "mkdocstrings[python]",
-    "mkdocs-autorefs",
-    "mkdocs-autoapi",
-    "ruff",
-    "debugpy",
+  "pytest",
+  "pytest-cov",
+  "pytest-mock",
+  "mkdocs",
+  "mkdocs-material",
+  "mkdocstrings[python]",
+  "mkdocs-autorefs",
+  "mkdocs-autoapi",
+  "ruff",
+  "debugpy",
 ]
 # Blender as a Python module, to run the tests without a Blender installation
 # (`make pytest`). Each bpy release needs exactly one Python version, 3.13 for
 # 5.1 and 5.2, and has no wheel for Intel Macs or Linux on ARM.
 bpy = [
-    "bpy==5.2.3; python_full_version >= '3.13' and python_full_version < '3.14' and ((sys_platform == 'darwin' and platform_machine == 'arm64') or (sys_platform == 'linux' and platform_machine == 'x86_64') or sys_platform == 'win32')",
+  "bpy==5.2.3; python_full_version >= '3.13' and python_full_version < '3.14' and ((sys_platform == 'darwin' and platform_machine == 'arm64') or (sys_platform == 'linux' and platform_machine == 'x86_64') or sys_platform == 'win32')",
 ]
-
-[tool.uv.sources]
-nyx-bridge = { git = "https://github.com/sowwic/nyx-bridge", tag = "v1.0.0" }
 
 [tool.ruff]
 src = ["src"]
@@ -51,16 +44,8 @@ exclude = ["**/resources_rc.py"]
 
 show-fixes = true
 line-length = 89
-lint.select = [
-    "E",
-    "F",
-    "UP",
-]
-lint.ignore = [
-    "D100",
-    "D104",
-    "D103",
-]
+lint.select = ["E", "F", "UP"]
+lint.ignore = ["D100", "D104", "D103"]
 
 [tool.pytest.ini_options]
 addopts = "--cov=nyx_bridge_blender --cov-report=term-missing"
@@ -68,8 +53,8 @@ log_cli = true
 log_cli_level = "ERROR"
 
 [tool.ty.rules]
-unresolved-attribute="ignore"
-invalid-argument-type="ignore"
-invalid-assignment="ignore"
-invalid-return-type="ignore"
-invalid-method-override="ignore"
+unresolved-attribute = "ignore"
+invalid-argument-type = "ignore"
+invalid-assignment = "ignore"
+invalid-return-type = "ignore"
+invalid-method-override = "ignore"
