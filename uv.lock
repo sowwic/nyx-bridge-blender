@@ -805,16 +805,11 @@ wheels = [
 ]
 
 [[package]]
-name = "nyx-bridge"
-version = "1.0.0"
-source = { git = "https://github.com/sowwic/nyx-bridge?tag=v1.0.0#d0e05a1b4af2c4bbbb113925f39edf78f1ec421d" }
-
-[[package]]
 name = "nyx-bridge-blender"
 version = "1.0.0"
 source = { editable = "." }
 dependencies = [
-    { name = "nyx-bridge" },
+    { name = "sowwic-nyx-bridge" },
 ]
 
 [package.dev-dependencies]
@@ -835,7 +830,7 @@ dev = [
 ]
 
 [package.metadata]
-requires-dist = [{ name = "nyx-bridge", git = "https://github.com/sowwic/nyx-bridge?tag=v1.0.0" }]
+requires-dist = [{ name = "sowwic-nyx-bridge", specifier = ">=1.0.0" }]
 
 [package.metadata.requires-dev]
 bpy = [{ name = "bpy", marker = "(python_full_version == '3.13.*' and platform_machine == 'arm64' and sys_platform == 'darwin') or (python_full_version == '3.13.*' and platform_machine == 'x86_64' and sys_platform == 'linux') or (python_full_version == '3.13.*' and sys_platform == 'win32')", specifier = "==5.2.3" }]
@@ -1078,6 +1073,15 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/b9/ab/d8e407669ffe5014429baf780c2df47e001968a6e4c17f615e2e7b13a9ba/ruff-0.17.4-py3-none-win32.whl", hash = "sha256:3971a78cba76298b284c8321e6d40d93045ed348bec5c369d85099efc97fb7cf", size = 9931993, upload-time = "2026-11-05T18:52:11.169Z" },
     { url = "https://files.pythonhosted.org/packages/bd/15/42af8a72d8946e3c9efd2bbf6641e462b6832783b0d043d63ef5b280ba7f/ruff-0.17.4-py3-none-win_amd64.whl", hash = "sha256:67c5a894fc054cf41f75f7afa24815de5a74329d97634126c2a1015740ff4e8c", size = 10292922, upload-time = "2026-11-05T18:52:13.436Z" },
     { url = "https://files.pythonhosted.org/packages/68/9e/f1dbffcfb8ff25dadbc21f87a8b73c3848abe4abada9d4b08ccef8bec40c/ruff-0.17.4-py3-none-win_arm64.whl", hash = "sha256:181ae38a9a8fb94925bf7d0794327b48d7fd7f4b50cfd84c0e999cc09ef8d131", size = 9889396, upload-time = "2026-11-05T18:52:15.549Z" },
+]
+
+[[package]]
+name = "sowwic-nyx-bridge"
+version = "1.0.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/88/e4/52c9991ed82a3a6c5ec0126d01f8d7147f0f8b49022b04c9940d30d006be/sowwic_nyx_bridge-1.0.0.tar.gz", hash = "sha256:887a7774b938676b573a5831138c3f0a95ff96f5e96c5c260a2a906078068d72", size = 14817, upload-time = "2026-11-16T20:57:19.875Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/5e/7c/299f8a90cb96d84f3bb4a51e76144e8b4b107169734a335a964c524822ee/sowwic_nyx_bridge-1.0.0-py3-none-any.whl", hash = "sha256:4e76c983eb72843a5e1835db013e9375577f42523fdcab93df6931d47aa71396", size = 16473, upload-time = "2026-11-16T20:57:18.499Z" },
 ]
 
 [[package]]

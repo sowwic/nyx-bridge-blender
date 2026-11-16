@@ -2,8 +2,10 @@
 """Build the Blender extension zip.
 
 Blender installs an extension without fetching anything, so the zip carries the wheels
-of this package and of its dependencies. The dependencies are built from the git
-revisions pinned in `[tool.uv.sources]` of `pyproject.toml`.
+of this package and of its dependencies, at the versions of `uv.lock`. A dependency with
+a git source in `[tool.uv.sources]` of `pyproject.toml` is built from that revision, the
+others are downloaded as wheels from the package index. They have to be pure Python
+(`py3-none-any`), as one extension zip serves every platform.
 
     BLENDER=/path/to/Blender python scripts/build_extension.py [--output-dir dist]
 """
@@ -30,11 +32,6 @@ def run(*command: str | os.PathLike, cwd: pathlib.Path | None = None) -> None:
     subprocess.run([str(part) for part in command], cwd=cwd, check=True)
 
 
-def dependency_name(requirement: str) -> str:
-    """Get the project name of a requirement like `nyx-bridge>=1`."""
-    return re.split(r"[<>=!~\[; ]", requirement.strip(), maxsplit=1)[0]
-
-
 def build_dependency_wheel(name: str, source: dict, wheels_dir: pathlib.Path) -> None:
     """Build the wheel of a dependency from the git revision it is pinned to.
 
@@ -52,6 +49,64 @@ def build_dependency_wheel(name: str, source: dict, wheels_dir: pathlib.Path) ->
     if reference:
         run("git", "checkout", "--quiet", reference, cwd=checkout)
     run("uv", "build", "--wheel", "--out-dir", wheels_dir, checkout)
+
+
+def locked_requirements() -> list[tuple[str, str]]:
+    """Get the runtime dependencies of the project as locked in `uv.lock`.
+
+    Returns:
+        list[tuple[str, str]]: project name and pinned version of each, the
+            dependencies of dependencies included.
+    """
+    output = subprocess.run(
+        ["uv", "export", "--no-dev", "--no-emit-project", "--no-hashes", "--quiet"],
+        cwd=ROOT,
+        check=True,
+        capture_output=True,
+        text=True,
+    ).stdout
+    requirements = []
+    for line in output.splitlines():
+        match = re.match(r"^([A-Za-z0-9._-]+)==([^\s;]+)", line)
+        if match:
+            requirements.append((match.group(1), match.group(2)))
+    return requirements
+
+
+def download_wheels(
+    requirements: list[tuple[str, str]], wheels_dir: pathlib.Path
+) -> None:
+    """Download the wheels of pinned requirements from the package index.
+
+    Args:
+        requirements (list[tuple[str, str]]): project name and version of each.
+        wheels_dir (pathlib.Path): folder to put the wheels in.
+    """
+    run(
+        "uv",
+        "run",
+        "--no-project",
+        "--with",
+        "pip",
+        "python",
+        "-m",
+        "pip",
+        "download",
+        "--quiet",
+        "--only-binary=:all:",
+        "--no-deps",
+        "--dest",
+        wheels_dir,
+        *(f"{name}=={version}" for name, version in requirements),
+    )
+    platform_specific = [
+        path.name
+        for path in wheels_dir.glob("*.whl")
+        if not path.name.endswith("-none-any.whl")
+    ]
+    if platform_specific:
+        names = ", ".join(platform_specific)
+        raise SystemExit(f"Not pure Python, so not bundled: {names}")
 
 
 def write_manifest(source_dir: pathlib.Path, wheel_names: list[str]) -> None:
@@ -98,9 +153,14 @@ def main() -> None:
     wheels_dir.mkdir()
 
     run("uv", "build", "--wheel", "--out-dir", wheels_dir, ROOT)
-    for requirement in pyproject["project"].get("dependencies", []):
-        name = dependency_name(requirement)
-        build_dependency_wheel(name, sources.get(name, {}), wheels_dir)
+    from_index = []
+    for name, version in locked_requirements():
+        if name in sources:
+            build_dependency_wheel(name, sources[name], wheels_dir)
+        else:
+            from_index.append((name, version))
+    if from_index:
+        download_wheels(from_index, wheels_dir)
 
     write_manifest(source_dir, sorted(path.name for path in wheels_dir.glob("*.whl")))
     args.output_dir.mkdir(parents=True, exist_ok=True)
